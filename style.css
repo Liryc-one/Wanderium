@@ -96,3 +96,33 @@ footer {
   color: #999;
   margin-top: 2rem;
 }
+
+/* New styles for the recommendation card */
+.card {
+  background: var(--card);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 0.8rem;
+}
+
+.card p {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+.card button {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+}
