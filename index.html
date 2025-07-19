@@ -6,9 +6,6 @@
   <title>Wanderium</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
   <header>
@@ -17,14 +14,14 @@
   </header>
 
   <main>
-    <div class="search-box">
-      <input type="text" id="countryInput" placeholder="Enter a country..." />
-      <button onclick="searchCountry()">Search</button>
-    </div>
+    <section class="search-box">
+      <input type="text" id="country-input" placeholder="Enter a country..." />
+      <button id="search-btn">Search</button>
+    </section>
 
     <section id="recommendation" class="card">
-      <h2>Country Recommendation</h2>
-      <p>Looking for your next adventure? Discover the fascinating culture, history, and beauty of <strong>Japan</strong>.</p>
+      <h2>Recommended Destination</h2>
+      <p>Looking for inspiration? Discover the wonders of <strong>Japan</strong>!</p>
       <button onclick="recommendCountry('japan')">Explore Japan</button>
     </section>
 
@@ -37,14 +34,6 @@
     <p>&copy; 2025 Wanderium. Travel beautifully.</p>
   </footer>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
-  <script>
-    function recommendCountry(country) {
-      document.getElementById('countryInput').value = country;
-      searchCountry();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
