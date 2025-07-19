@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wanderium</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
@@ -19,6 +19,13 @@
       <input type="text" id="countryInput" placeholder="Enter a country..." />
       <button onclick="searchCountry()">Search</button>
     </div>
+
+    <section id="recommendation" class="card">
+      <h2>Country Recommendation</h2>
+      <p>Looking for your next adventure? Discover the fascinating culture, history, and beauty of <strong>Japan</strong>.</p>
+      <button onclick="recommendCountry('japan')">Explore Japan</button>
+    </section>
+
     <section id="history"></section>
     <section id="places"></section>
     <div id="map"></div>
@@ -30,5 +37,12 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
+  <script>
+    function recommendCountry(country) {
+      document.getElementById('countryInput').value = country;
+      searchCountry();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
