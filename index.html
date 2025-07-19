@@ -2,49 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wanderium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Globetrove</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1 class="logo">Wanderium</h1>
-    <button id="toggle-dark">🌓</button>
+    <h1 class="logo">Globetrove</h1>
+    <button id="toggle-dark">🌙 Toggle Dark Mode</button>
   </header>
 
   <main>
-    <section class="search-box">
+    <section id="search-section">
       <input type="text" id="country-input" placeholder="Enter a country..." />
       <button id="search-btn">Search</button>
+      <button id="recommend-btn">Recommend a Country</button>
+      <select id="country-dropdown">
+        <option value="">-- Choose from list --</option>
+      </select>
     </section>
 
-    <section id="recommendation" class="card">
-      <h2>Recommended Destination</h2>
-      <p>Looking for inspiration? Discover the wonders of <strong>Japan</strong>!</p>
-      <button onclick="recommendCountry('japan')">Explore Japan</button>
+    <section id="word-of-the-day" class="highlight-box">
+      <!-- Word of the Day inserted by JS -->
     </section>
 
-    <section id="history"></section>
-    <section id="places"></section>
-    <!-- Map section -->
-<section id="map-container">
-  <h2>Map</h2>
-  <div id="map"></div>
-</section>
-    <div id="map"></div>
+    <section id="history" class="info-section">
+      <!-- History loaded here -->
+    </section>
+
+    <section id="places" class="info-section">
+      <!-- Top places loaded here -->
+    </section>
+
+    <section id="map-container">
+      <h2>📍 Map View</h2>
+      <div id="map"></div>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Wanderium. Travel beautifully.</p>
+    <p>Built with 🌍 by Globetrove</p>
   </footer>
 
-  <script src="script.js" defer></script>
-  <!-- Leaflet CSS & JS -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
