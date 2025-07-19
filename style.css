@@ -1,0 +1,98 @@
+:root {
+  --bg: #fdfcfb;
+  --text: #1b1b1b;
+  --card: #ffffff;
+  --primary: #006d77;
+  --accent: #83c5be;
+}
+
+body.dark {
+  --bg: #1a1a1a;
+  --text: #fdfcfb;
+  --card: #252525;
+  --primary: #00b4d8;
+  --accent: #5ec8d8;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+main {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: auto;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+input[type="text"] {
+  padding: 0.6rem 1rem;
+  width: 60%;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  background-color: var(--accent);
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--primary);
+}
+
+#history, #places {
+  background: var(--card);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+#map {
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 2rem;
+}
