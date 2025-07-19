@@ -1,74 +1,145 @@
-// DOM Elements
-const countryInput = document.getElementById("country-input");
 const searchBtn = document.getElementById("search-btn");
-const resultsContainer = document.getElementById("results");
-const map = L.map("map").setView([20, 0], 2); // Default view
+const countryInput = document.getElementById("country-input");
+const historySection = document.getElementById("history");
+const placesSection = document.getElementById("places");
+const darkToggle = document.getElementById("toggle-dark");
+const recommendBtn = document.getElementById("recommend-btn");
+const countryDropdown = document.getElementById("country-dropdown");
+const wordOfDay = document.getElementById("word-of-the-day");
 
-// Tile Layer for Map
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "&copy; OpenStreetMap contributors"
-}).addTo(map);
+let map;
+let markers = [];
 
-// Search Click Event
-searchBtn.addEventListener("click", async () => {
+// List of countries for dropdown and random
+const countries = [
+  "Japan", "Italy", "Morocco", "Brazil", "Canada", "Thailand", "Egypt", "Spain", "Kenya", "India",
+  "Greece", "South Africa", "Norway", "Turkey", "Vietnam", "Mexico", "France", "Germany", "Australia", "Peru"
+];
+
+// Dark mode toggle
+darkToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
+
+// Search button
+searchBtn.addEventListener("click", () => {
   const country = countryInput.value.trim();
-  if (!country) return;
+  if (!country) return alert("Please enter a country name.");
+  fetchCountryInfo(country);
+});
 
-  resultsContainer.innerHTML = "<p>Loading...</p>";
-  const data = await fetchTouristSpots(country);
+// Random recommendation
+recommendBtn.addEventListener("click", () => {
+  const random = countries[Math.floor(Math.random() * countries.length)];
+  countryInput.value = random;
+  fetchCountryInfo(random);
+});
 
-  if (data && data.length > 0) {
-    resultsContainer.innerHTML = `<h2>Top Places to Visit in ${country}:</h2>`;
-    map.setView([data[0].lat, data[0].lon], 5); // Center on first result
-
-    data.forEach(place => {
-      const placeCard = document.createElement("div");
-      placeCard.className = "place-card";
-      placeCard.innerHTML = `<h3>${place.name}</h3>`;
-      resultsContainer.appendChild(placeCard);
-
-      L.marker([place.lat, place.lon]).addTo(map).bindPopup(place.name);
-    });
-  } else {
-    resultsContainer.innerHTML = "<p>No data found for this country.</p>";
+// Dropdown change
+countryDropdown.addEventListener("change", () => {
+  const selected = countryDropdown.value;
+  if (selected !== "") {
+    countryInput.value = selected;
+    fetchCountryInfo(selected);
   }
 });
 
-// Fetch Data from Wikipedia + OpenStreetMap
-async function fetchTouristSpots(country) {
-  const wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=Tourist attractions in ${country}&prop=links&format=json&origin=*`;
+// Word of the Day
+function loadWordOfDay() {
+  const word = countries[Math.floor(Math.random() * countries.length)];
+  wordOfDay.textContent = `🌍 Word of the Day: ${word}`;
+  wordOfDay.addEventListener("click", () => {
+    countryInput.value = word;
+    fetchCountryInfo(word);
+  });
+}
+
+// Fetch country info
+async function fetchCountryInfo(country) {
+  historySection.innerHTML = `<h2>Loading history for ${country}...</h2>`;
+  placesSection.innerHTML = `<h2>Loading places in ${country}...</h2>`;
+  if (map) {
+    markers.forEach(marker => map.removeLayer(marker));
+    map.setView([0, 0], 2);
+  }
 
   try {
-    const response = await fetch(wikiApiUrl);
-    const data = await response.json();
-    const links = data.parse.links;
-
-    const places = links
-      .filter(link => link.ns === 0)
-      .map(link => link["*"])
-      .slice(0, 15);
-
-    const geocodedPlaces = [];
-
-    for (const place of places) {
-      const geoUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place + ", " + country)}`;
-      const geoResponse = await fetch(geoUrl);
-      const geoData = await geoResponse.json();
-
-      if (geoData.length > 0) {
-        geocodedPlaces.push({
-          name: place,
-          lat: parseFloat(geoData[0].lat),
-          lon: parseFloat(geoData[0].lon)
-        });
-      }
-
-      if (geocodedPlaces.length >= 10) break;
-    }
-
-    return geocodedPlaces;
+    await Promise.all([
+      fetchWikipediaExtract(country),
+      fetchTopCities(country)
+    ]);
   } catch (err) {
-    console.error("Error:", err);
-    return null;
+    historySection.innerHTML = `<p>⚠️ Could not load info for "${country}".</p>`;
+    placesSection.innerHTML = "";
+    console.error(err);
   }
 }
+
+// Wikipedia summary
+async function fetchWikipediaExtract(country) {
+  const response = await fetch(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(country)}`
+  );
+  const data = await response.json();
+  if (data.extract) {
+    historySection.innerHTML = `<h2>About ${country}</h2><p>${data.extract}</p>`;
+  } else {
+    historySection.innerHTML = `<p>No history found.</p>`;
+  }
+}
+
+// OpenStreetMap API for places
+async function fetchTopCities(country) {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?country=${encodeURIComponent(
+      country
+    )}&format=json&limit=10&accept-language=en`
+  );
+  const results = await response.json();
+
+  if (!results.length) {
+    placesSection.innerHTML = `<p>No places found in ${country}.</p>`;
+    return;
+  }
+
+  // Display list
+  placesSection.innerHTML = `<h2>Top Places in ${country}</h2><ul>${results
+    .map(place => `<li>${place.display_name}</li>`)
+    .join("")}</ul>`;
+
+  // Map view
+  if (!map) {
+    map = L.map("map").setView([results[0].lat, results[0].lon], 5);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+    }).addTo(map);
+  } else {
+    map.setView([results[0].lat, results[0].lon], 5);
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+  }
+
+  // Add markers
+  results.forEach(place => {
+    const marker = L.marker([place.lat, place.lon])
+      .addTo(map)
+      .bindPopup(place.display_name);
+    markers.push(marker);
+  });
+}
+
+// Populate dropdown
+function populateDropdown() {
+  countries.forEach(country => {
+    const option = document.createElement("option");
+    option.value = country;
+    option.textContent = country;
+    countryDropdown.appendChild(option);
+  });
+}
+
+// Init on page load
+document.addEventListener("DOMContentLoaded", () => {
+  populateDropdown();
+  loadWordOfDay();
+});
