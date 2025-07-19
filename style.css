@@ -98,3 +98,18 @@ footer {
   color: #777;
   font-size: 0.9rem;
 }
+#map-container {
+  padding: 2rem;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+/* Dark mode styling */
+body.dark #map {
+  filter: brightness(0.8);
+}
